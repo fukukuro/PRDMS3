@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>発車標</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+        <link href="./Display.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="parent">
+            <div class="Time1 Time First">12:34</div>
+            <div class="Type_J1 Type_J First">区間準急</div>
+            <div class="Type_E1 Type_E First">Suburban-Semi-Express</div>
+            <div class="Direction_J1 Direction_J First">大阪難波</div>
+            <div class="Direction_E1 Direction_E First">Osaka-Namba</div>
+            <div class="Track1 Track First">23</div>
+
+            <div class="Time2 Time Second">12:34</div>
+            <div class="Type_J2 Type_J Second">快速急行</div>
+            <div class="Type_E2 Type_E Second">Rapid-Express</div>
+            <div class="Direction_J2 Direction_J Second">神戸三宮</div>
+            <div class="Direction_E2 Direction_E Second">Kobe-Sannomiya</div>
+            <div class="Track2 Track Second">23</div>
+
+            <div class="Attention">電車にご注意ください。<br>Please mind trains.</div>
+
+            <div class="NowClock" id="ClockArea">00:00</div>
+        </div>
+        <audio id="Notice" controls src=""></audio>
+        <audio src="./Sounds/Special/Notice.mp3" id="Audio_notice" loop="false" controls></audio>
+        <audio src="./Sounds/Special/Approach.wav" id="Audio_Approach" loop="false" controls></audio>
+        <audio src="./Sounds/Special/Arrive.wav" id="Audio_Arrive" loop="false" controls></audio>
+        <audio src="./Sounds/Special/Pass.wav" id="Audio_Pass" loop="false" controls></audio>
+        <script>
+            let Count = 0;
+            const TrainList = [
+                //[時刻,種別,種別(E),行先,行先(E),のりば,編成]
+                [3600000,"各駅停車","Local","尼崎","Amagasaki",3,6,0],
+                [3900000,"快速急行","Rapid-Express","神戸三宮","Amagasaki",3,10,0],
+                [4200000,"各駅停車","Local","尼崎","Amagasaki",3,4,0],
+                [4500000,"区間準急","Suburban-Semi-Express","尼崎","Amagasaki",3,6,0],
+                [4800000,"各駅停車","Local","尼崎","Amagasaki",3,4,0]
+            ]
+        </script>
+        <script src="./Vclock.js"></script>
+        <script src="./Interface.js"></script>
+        <script src="./Announcement.js"></script>
+    </body>
+</html>

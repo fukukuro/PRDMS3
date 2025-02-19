@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>発車標</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="parent">
+            <div class="Time1 Time First">12:34</div>
+            <div class="Type_J1 Type_J First">区間準急</div>
+            <div class="Type_E1 Type_E First">Suburban-Semi-Express</div>
+            <div class="Direction_J1 Direction_J First">大阪難波</div>
+            <div class="Direction_E1 Direction_E First">Osaka-Namba</div>
+            <div class="Track1 Track First">23</div>
+
+            <div class="Time2 Time Second">12:34</div>
+            <div class="Type_J2 Type_J Second">快速急行</div>
+            <div class="Type_E2 Type_E Second">Rapid-Express</div>
+            <div class="Direction_J2 Direction_J Second">神戸三宮</div>
+            <div class="Direction_E2 Direction_E Second">Kobe-Sannomiya</div>
+            <div class="Track2 Track Second">23</div>
+
+            <div class="Attention">電車にご注意ください。<br>Please mind trains.</div>
+
+            <div class="NowClock" id="ClockArea">00:00</div>
+        </div>
+        <audio src="./Sounds/Special/Notice.mp3" id="Audio_notice" loop="false" controls></audio>
+        <audio src="./Sounds/Special/Approach.wav" id="Audio_Approach" loop="false" controls></audio>
+        <audio src="./Sounds/Special/Arrive.wav" id="Audio_Arrive" loop="false" controls></audio>
+        <audio src="./Sounds/Special/Pass.wav" id="Audio_Pass" loop="false" controls></audio>
+        <style>
+            body{
+                font-family: "Noto Sans JP";
+                font-weight: 600;
+                color: white;
+                background-color: black;
+                font-size: 2em;
+            }
+            .parent {
+            display: grid;
+            grid-template-columns: repeat(4, 24vw);
+            grid-template-rows: 23vh 9vh 23vh 9vh 31vh;
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+            }
+
+            .Time1 { grid-area: 1 / 1 / 3 / 2; }
+            .Type_J1 { grid-area: 1 / 2 / 2 / 3; }
+            .Type_E1 { grid-area: 2 / 2 / 3 / 3; }
+            .Direction_J1 { grid-area: 1 / 3 / 2 / 4; }
+            .Direction_E1 { grid-area: 2 / 3 / 3 / 4; }
+            .Track1 { grid-area: 1 / 4 / 3 / 5; }
+            .Time2 { grid-area: 3 / 1 / 5 / 2; }
+            .Type_J2 { grid-area: 3 / 2 / 4 / 3; }
+            .Type_E2 { grid-area: 4 / 2 / 5 / 3; }
+            .Direction_J2 { grid-area: 3 / 3 / 4 / 4; }
+            .Direction_E2 { grid-area: 4 / 3 / 5 / 4; }
+            .Track2 { grid-area: 3 / 4 / 5 / 5; }
+            .Attention { grid-area: 5 / 1 / 6 / 4; }
+            .NowClock { grid-area: 5 / 4 / 6 / 5; }
+
+            .Time{
+                font-size: 2.75em;
+                vertical-align: middle;
+            }
+            .Type_J{
+                font-size: 2.75em;
+                vertical-align: middle;
+            }
+            .Type_E{
+                font-size: 0.9em;
+                vertical-align: middle;
+            }
+            .Direction_J{
+                font-size: 2.75em;
+                vertical-align: middle;
+            }
+            .Direction_E{
+                font-size: 0.9em;
+                vertical-align: middle;
+            }
+            .Track{
+                font-size: 2.75em;
+                vertical-align: middle;
+
+            }
+            .Attention{
+                font-size: 2.75em;
+            }
+            .NowClock{
+                font-size: 2.75em;
+            }
+        </style>
+        <script>
+            //仮想時刻
+            let Vclock = new Object();
+            Vclock.settings = new Object();
+            Vclock.settings.BeginTime = Date.parse("2025-02-15T21:13:00");
+            Vclock.settings.Raito = 3;
+            Vclock.get = function(){
+                const Now = Date.now();
+                return (Now - Vclock.settings.BeginTime - 32400)*Vclock.settings.Raito;
+            }
+            const ClockField = document.getElementById("ClockArea");
+            let Count = 0;
+            const TrainList = [
+                //[時刻,種別,種別(E),行先,行先(E),のりば,編成]
+                [3600000,"各駅停車","Local","尼崎","Amagasaki",3,6,0],
+                [3900000,"快速急行","Rapid-Express","神戸三宮","Amagasaki",3,10,0],
+                [4200000,"各駅停車","Local","尼崎","Kobe-Sannnomiya",3,4,0],
+                [4500000,"区間準急","Suburban-Semi-Express","尼崎","Amagasaki",3,6,0],
+                [4800000,"各駅停車","Local","尼崎","Amagasaki",3,4,0]
+            ]
+            setInterval(() => {
+                const temp = new Date(Vclock.get());
+                ClockField.innerText = (temp.getUTCHours()).toString().padStart( 2, '0') + ":" + temp.getUTCMinutes().toString().padStart( 2, '0') + ":" + temp.getUTCSeconds().toString().padStart( 2, '0');
+                console.log(temp.getUTCHours());
+            }, 100);
+            function updateDisp(){
+                const TheTrain = TrainList[Count];
+                const Clock = new Date(TheTrain[0]);
+                document.getElementsByClassName("Time First")[0].innerText = (Clock.getUTCHours()).toString().padStart( 2, '0') + ":" + Clock.getUTCMinutes().toString().padStart( 2, '0');
+                document.getElementsByClassName("Type_J First")[0].innerText = TheTrain[1]
+                document.getElementsByClassName("Type_E First")[0].innerText = TheTrain[2]
+                document.getElementsByClassName("Direction_J First")[0].innerText = TheTrain[3]
+                document.getElementsByClassName("Direction_E First")[0].innerText = TheTrain[4]
+                document.getElementsByClassName("Track First")[0].innerText = TheTrain[5]
+                const TheTrain2 = TrainList[Count + 1];
+                const Clock2 = new Date(TheTrain2[0])
+                document.getElementsByClassName("Time Second")[0].innerText = (Clock2.getUTCHours()).toString().padStart( 2, '0') + ":" + Clock2.getUTCMinutes();
+                document.getElementsByClassName("Type_J Second")[0].innerText = TheTrain2[1]
+                document.getElementsByClassName("Type_E Second")[0].innerText = TheTrain2[2]
+                document.getElementsByClassName("Direction_J Second")[0].innerText = TheTrain2[3]
+                document.getElementsByClassName("Direction_E Second")[0].innerText = TheTrain2[4]
+                document.getElementsByClassName("Track Second")[0].innerText = TheTrain2[5]
+            }
+            updateDisp()
+            setInterval(() => {
+                if(TrainList[Count][0] < Vclock.get()){
+                    Count += 1;
+                    //document.getElementById("Audio_Pass").pause();
+                    updateDisp();
+                    document.getElementById("Audio_notice").currentTime = 0;
+                    document.getElementById("Arrrive").currentTime = 0;
+                    document.getElementById("Approach").currentTime = 0;
+                    document.getElementById("Pass").currentTime = 0;
+                }
+                if(TrainList[Count][0] < Vclock.get()+180000 && TrainList[Count][7] == 0){
+                    //予告
+                    TrainList[Count][7] = 1;
+                    document.getElementById("Audio_notice").play();
+                    console.log("予告")
+                }
+                if(TrainList[Count][0] < Vclock.get()+130000 && TrainList[Count][7] == 1){
+                    //予告
+                    TrainList[Count][7] = 1;
+                    //document.getElementById("Audio_notice").pause();
+                    console.log("予告停止")
+                }
+                if(TrainList[Count][0] < Vclock.get()+30000 && TrainList[Count][7] == 1){
+                    //接近放送
+                    TrainList[Count][7] = 2;
+                    //document.getElementById("Audio_notice").pause();
+                    document.getElementById("Audio_Arrive").play();
+                    console.log("接近")
+                }
+                if(TrainList[Count][0] < Vclock.get()+15000 && TrainList[Count][7] == 2){
+                    //接近チャイム
+                    TrainList[Count][7] = 3;
+                    //document.getElementById("Audio_Arrive").pause();
+                    document.getElementById("Audio_Approach").play();
+                    console.log("接近2")
+                }
+                if(TrainList[Count][0] < Vclock.get()+5000 && TrainList[Count][7] == 3){
+                    //発車チャイム
+                    TrainList[Count][7] = 4;
+                    document.getElementById("Audio_Approach").pause();
+                    document.getElementById("Audio_Pass").play();
+                    console.log("発車")
+                }
+            }, 100);
+        </script>
+    </body>
+</html>

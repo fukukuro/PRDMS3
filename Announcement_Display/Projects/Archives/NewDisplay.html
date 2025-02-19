@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>発車標</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div>
+            NoticeAnnouncement:
+            <audio id="Notice" controls></audio>
+            <button onclick="Act()">Act</button>
+        </div>
+        <script>
+            //仮想時刻
+            let Vclock = new Object();
+            Vclock.settings = new Object();
+            Vclock.settings.BeginTime = Date.parse("2025-02-15T21:30:00");
+            Vclock.settings.Raito = 3;
+            Vclock.get = function(){
+                const Now = Date.now();
+                return (Now - Vclock.settings.BeginTime - 32400)*Vclock.settings.Raito;
+            }
+            //音源読み込み
+            const AudioURL = "./Sounds/";
+            const DestinationArray = ["尼崎"];
+            const TypeArray = ["快速急行"];
+            let PlayArray = new Array();
+            function NoticeAnnouncement(Track,Hour,Min,Type,Destination){
+                let Audios = new Object();
+                if(Track <= 40){
+                    Audios.Track = AudioURL + "番乗り場に/" + Track + ".wav";
+                }else{alert("Track Error");}
+                if(Hour <= 60){
+                    Audios.Hour = AudioURL + "時/" + Hour + ".wav";
+                }else{alert("Hours Error");}
+                if(Min <= 60){
+                    Audios.Min = AudioURL + "分発/" + Min + ".wav";
+                }else{alert("Minutes Error");}
+                if(DestinationArray.indexOf(Destination) !== -1){
+                    Audios.Destination = AudioURL + "ゆき/" + Destination + ".wav";
+                }else{alert("Destination Error");}
+                if(TypeArray.indexOf(Type) !== -1){
+                    Audios.Type = AudioURL + "種別/" + Type + ".wav";
+                }else{alert("Type Error");}
+                const NoticeAnnouncementArray = [AudioURL + "Special/次に.wav",Audios.Track,AudioURL + "Special/参ります.wav",AudioURL + "Special/電車は.wav",Audios.Hour,Audios.Min,Audios.Destination,Audios.Type,AudioURL + "Special/です.wav"];
+                for(i of NoticeAnnouncementArray){
+                    PlayArray.push(i);
+                }
+            }
+            function Act(){
+                NoticeAnnouncement("1","11","22","快速急行","尼崎");
+                let source = "";
+            source = PlayArray.shift();
+            document.getElementById("Notice").src = source;
+            document.getElementById("Notice").play();
+            setInterval(() => {
+                if(document.getElementById("Notice").ended){
+                    source =  PlayArray.shift();
+                    document.getElementById("Notice").src = source;
+                    document.getElementById("Notice").currentTime = 0;
+                    document.getElementById("Notice").play();
+                }
+            }, 1);
+            }
+            setInterval(() => {
+                const temp = new Date(Vclock.get())
+                ClockField.innerText = (temp.getHours()-9 + (temp.getDay()*24)).toString().padStart( 2, '0') + ":" + temp.getMinutes().toString().padStart( 2, '0') + ":" + temp.getSeconds().toString().padStart( 2, '0');
+            }, 100);
+            function updateDisp(){
+                const TheTrain = TrainList[Count];
+                const Clock = new Date(TheTrain[0]);
+                const TheTrain2 = TrainList[Count + 1];
+                const Clock2 = new Date(TheTrain2[0])
+                const dgebcn = function(i){return document.getElementsByClassName(i);}
+                dgebcn("Time First")[0].innerText = (Clock.getHours()-9).toString().padStart( 2, '0') + ":" + Clock.getMinutes().toString().padStart( 2, '0');
+                dgebcn("Type_J First")[0].innerText = TheTrain[1]
+                dgebcn("Type_E First")[0].innerText = TheTrain[2]
+                dgebcn("Direction_J First")[0].innerText = TheTrain[3]
+                dgebcn("Direction_E First")[0].innerText = TheTrain[4]
+                dgebcn("Track First")[0].innerText = TheTrain[5]
+                dgebcn("Time Second")[0].innerText = (Clock2.getHours()-9).toString().padStart( 2, '0') + ":" + Clock2.getMinutes();
+                dgebcn("Type_J Second")[0].innerText = TheTrain2[1]
+                dgebcn("Type_E Second")[0].innerText = TheTrain2[2]
+                dgebcn("Direction_J Second")[0].innerText = TheTrain2[3]
+                dgebcn("Direction_E Second")[0].innerText = TheTrain2[4]
+                dgebcn("Track Second")[0].innerText = TheTrain2[5]
+            }
+            updateDisp()
+            setInterval(() => {
+                if(TrainList[Count][0] < Vclock.get()){
+                    Count += 1;
+                    updateDisp();
+                    document.getElementById("Audio_notice").currentTime = 0;
+                    document.getElementById("Arrrive").currentTime = 0;
+                    document.getElementById("Approach").currentTime = 0;
+                    document.getElementById("Pass").currentTime = 0;
+                }
+                if(TrainList[Count][0] < Vclock.get()+180000 && TrainList[Count][7] == 0){
+                    //予告
+                    TrainList[Count][7] = 1;
+                    document.getElementById("Audio_notice").play();
+                    console.log("予告")
+                }
+                if(TrainList[Count][0] < Vclock.get()+130000 && TrainList[Count][7] == 1){
+                    //予告
+                    TrainList[Count][7] = 1;
+                    //document.getElementById("Audio_notice").pause();
+                    console.log("予告停止")
+                }
+                if(TrainList[Count][0] < Vclock.get()+30000 && TrainList[Count][7] == 1){
+                    //接近放送
+                    TrainList[Count][7] = 2;
+                    //document.getElementById("Audio_notice").pause();
+                    document.getElementById("Audio_Arrive").play();
+                    console.log("接近")
+                }
+                if(TrainList[Count][0] < Vclock.get()+15000 && TrainList[Count][7] == 2){
+                    //接近チャイム
+                    TrainList[Count][7] = 3;
+                    //document.getElementById("Audio_Arrive").pause();
+                    document.getElementById("Audio_Approach").play();
+                    console.log("接近2")
+                }
+                if(TrainList[Count][0] < Vclock.get()+5000 && TrainList[Count][7] == 3){
+                    //発車チャイム
+                    TrainList[Count][7] = 4;
+                    document.getElementById("Audio_Approach").pause();
+                    document.getElementById("Audio_Pass").play();
+                    console.log("発車")
+                }
+            }, 100);
+        </script>
+    </body>
+</html>

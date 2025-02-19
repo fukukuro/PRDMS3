@@ -1,0 +1,16 @@
+{
+    //Object informations
+    Sections[SectionName]{
+        DisplayName:String
+        IsTrainOccupy:Boolean
+        OccupyTrainName:String
+        SpecialBlockAge:Boolean
+    }
+    Trains[TrainName]{
+        DisplayName:String
+        NextTrainName:String
+        Staf:Array{
+            [Index].SectionName:String
+        }
+    }
+}
