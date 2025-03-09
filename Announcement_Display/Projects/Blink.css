@@ -1,0 +1,25 @@
+#Attention{
+animation: Attention 1s linear infinite;
+}
+@keyframes Attention{
+    0%{
+        background-color: red;
+        color: black;
+    }
+    49%{
+        background-color: red;
+        color: black;
+    }
+    50%{
+        background-color: black;
+        color: red;
+    }
+    99%{
+        background-color: black;
+        color: red;
+    }
+    100%{
+        background-color: red;
+        color: black;
+    }
+}

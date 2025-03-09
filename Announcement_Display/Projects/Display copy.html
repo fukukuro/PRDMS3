@@ -7,15 +7,17 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
         <link href="./Display.css" rel="stylesheet">
+        <link href="./Marquee.css" rel="stylesheet">
+        <link href="./Blink.css" rel="stylesheet">
     </head>
     <body>
         <div class="parent">
-            <div class="Time1 Time First">12:34</div>
-            <div class="Type_J1 Type_J First">区間準急</div>
-            <div class="Type_E1 Type_E First">Suburban-Semi-Express</div>
-            <div class="Direction_J1 Direction_J First">大阪難波</div>
-            <div class="Direction_E1 Direction_E First">Osaka-Namba</div>
-            <div class="Track1 Track First">23</div>
+            <div class="Time1 Time First">(Warning)</div>
+            <div class="Type_J1 Type_J First">Script</div>
+            <div class="Type_E1 Type_E First">スクリプト</div>
+            <div class="Direction_J1 Direction_J First">Error</div>
+            <div class="Direction_E1 Direction_E First">エラー</div>
+            <div class="Track1 Track First">E</div>
 
             <div class="Time2 Time Second">12:34</div>
             <div class="Type_J2 Type_J Second">快速急行</div>
@@ -24,7 +26,13 @@
             <div class="Direction_E2 Direction_E Second">Kobe-Sannomiya</div>
             <div class="Track2 Track Second">23</div>
 
-            <div class="Attention">電車にご注意ください。<br>Please mind trains.</div>
+            <div class="Attention" id="Attention" >電車にご注意ください。<br>Please mind trains.</div>
+            <div class="marquee" id="marquee" hidden>
+                <span>
+                    <!--Tab to edit-->
+                駆け込み乗車は、自己責任で。 Rushing into trains is dangerous.
+                </span>
+            </div>
 
             <div class="NowClock" id="ClockArea">00:00</div>
         </div>

@@ -26,6 +26,7 @@ grid-row-gap: 0px;
 .Direction_E2 { grid-area: 4 / 3 / 5 / 4; }
 .Track2 { grid-area: 3 / 4 / 5 / 5; }
 .Attention { grid-area: 5 / 1 / 6 / 4; }
+.marquee {grid-area: 5 / 1 / 6 / 4;}
 .NowClock { grid-area: 5 / 4 / 6 / 5; }
 
 .Time{

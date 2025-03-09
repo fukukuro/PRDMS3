@@ -1,0 +1,21 @@
+.marquee {
+  /*width: 72vw; /* marqueeの幅 */
+  overflow: hidden; /* marquee領域外のテキストを非表示にする */
+  white-space: nowrap; /* テキストを折り返さない */
+}
+
+.marquee span{
+  display: inline-block; /* テキストを横に並べる */
+  padding-left: 100%; /* アニメーション開始位置を右端に設定 */
+  animation: marquee 20s linear infinite;
+  font-size: 2.75em/* アニメーションを定義 */
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0); /* アニメーション開始時の位置 */
+  }
+  100% {
+    transform: translateX(-100%); /* アニメーション終了時の位置 */
+  }
+}
