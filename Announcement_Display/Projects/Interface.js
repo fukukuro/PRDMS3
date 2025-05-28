@@ -1,3 +1,11 @@
+function setApproaching() {
+    document.getElementById('Attention'). hidden = false;
+    document.getElementById('marquee'). hidden = true;
+}
+function unsetApproaching() {
+    document.getElementById('Attention'). hidden = true;
+    document.getElementById('marquee'). hidden = false;
+}
 const ClockField = document.getElementById("ClockArea");
 function updateDisp(){
     const TheTrain = TrainList[Count];

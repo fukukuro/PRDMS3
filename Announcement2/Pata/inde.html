@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>HTML</title>
+  
+  <!-- HTML -->
+  
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="sokutei">あああ</div>
+  <div class="pt2" id="pt2"><span class="pt2i" id="pt2i">西大寺</span></div>
+  <div class="pt3" id="pt3"></div>
+  <div class="pt1" id="pt1"></div>
+  <div class="pt4" id="pt4" hidden><div class="pt4c" id="pt4i">西大寺</div></div>
+  <style>
+    :root {
+  --commonFS: 50px;
+}
+    .pt1 {
+        font-size: var(--commonFS);
+    height: 11.5px;
+    overflow:hidden;
+    z-index:3;
+    background-color: black; color: white;
+    transform: translateY(-57.5px);
+    }
+    .pt2 {
+        font-size: var(--commonFS);
+    height: 23px;
+    overflow: hidden;
+    z-index: 5;
+    background-color: black; color: white;
+    transform: translateY(-11.5px);
+    }
+    .pt3 {
+        font-size: var(--commonFS);
+    height: 23px;
+    overflow: hidden;
+    z-index: 4;
+    background-color: black; color: white;
+    transform: translateY(-34.5px) rotateX(90deg);
+    transform-origin: calc(50% - 26px) center;
+    
+    }
+    .pt4 {
+        font-size: var(--commonFS);
+    height: 23px;
+    z-index:2;
+    transform: translateY(-69px) rotateX(0deg);
+    transform-origin: calc(50% + 11.5px) center; 
+    }
+    .pt4c{
+        font-size: var(--commonFS);
+        background-color: black; color: white;
+        height: 11.5px;
+        overflow: hidden;
+        margin-bottom: 11.5px;
+    }
+    body{
+        font-size: var(--commonFS);
+    }
+  </style>
+  <script>
+    const Base_Height = document.getElementById("sokutei").getBoundingClientRect().height / 2;
+    Array.from(document.getElementsByClassName("pt1")).forEach(
+        (elem)=>{
+            elem.style.height = `${Base_Height * 1}px`
+            elem.style.transform = `translateY(-${Base_Height * 5}px)`
+        }
+    )
+    Array.from(document.getElementsByClassName("pt2")).forEach(
+        (elem)=>{
+            elem.style.height = `${Base_Height * 2}px`
+            elem.style.transform = `translateY(-${Base_Height * 1}px)`
+        }
+    )
+    Array.from(document.getElementsByClassName("pt3")).forEach(
+        (elem)=>{
+            elem.style.height = `${Base_Height * 2}px`
+            elem.style.transform = `translateY(-${Base_Height * 5}px) rotateX(90deg)`
+            elem.style.transformOrigin = `calc(50% - ${Base_Height * 2.26}px) center`
+        }
+    )
+    Array.from(document.getElementsByClassName("pt4")).forEach(
+        (elem)=>{
+            elem.style.height = `${Base_Height * 2}px`
+            elem.style.transformOrigin = `calc(50% + ${Base_Height * 1}px) center`
+        }
+    )
+    Array.from(document.getElementsByClassName("pt4c")).forEach(
+        (elem)=>{
+            elem.style.height = `${Base_Height * 1}px`
+            elem.style.marginBottom = `${Base_Height * 1}px`
+        }
+    )
+    function rotateAnime(to){
+        let anime_ue = document.getElementById("pt4").animate(
+            [
+                { transform: `translateY(-${Base_Height * 6}px) rotateX(0deg)`},
+                { transform: `translateY(-${Base_Height * 6}px) rotateX(90deg)`}
+            ],
+            {
+                duration: 75,
+                iterations: 1,
+            },
+    );
+        document.getElementById("pt3").innerText = to;
+        document.getElementById("pt1").innerText = to;
+        document.getElementById("pt4").hidden = false;
+        anime_ue.onfinish = function(){
+
+            document.getElementById("pt4").hidden = true;
+            document.getElementById("pt3").transform = "translateY(-69px) rotateX(0deg)";
+            let anime_sita = document.getElementById("pt3").animate(
+                    [
+                        { transform: `translateY(-${Base_Height * 3}px) rotateX(90deg)`},
+                        { transform: `translateY(-${Base_Height * 3}px) rotateX(0deg)`}
+                    ],
+                    {
+                        duration: 75,
+                        iterations: 1,
+                    },
+            );
+            anime_sita.onfinish = function(){
+                document.getElementById("pt2i").innerHTML = to;
+                document.getElementById("pt4i").innerText = to;
+                document.getElementById("pt3").transform = `translateY(-${Base_Height * 6}) rotateX(90deg)`;
+            }
+        }
+    }
+    const datana = ["神戸三宮","尼崎","大阪難波","東花園","瓢箪山","石切","東生駒","大和西大寺","奈良","京都国際会館","京都","新田辺","宮津","橿原神宮前","天理","大阪上本町","五位堂","河内国分","大和八木","大和朝倉","榛原","名張","青山町","名古屋","富吉","桑名","四日市","塩浜","白塚","津","津新町","伊勢中川","河内天美","藤井寺","古市","橿原神宮前","壺阪山","吉野口","吉野","富田林","河内長野","松阪","宇治山田","五十鈴川","鳥羽","賢島"]
+    let count = 0;
+    setInterval(() => {
+        if(count<45){
+        rotateAnime(datana[count]);
+        count += 1;
+        }
+    }, 200);
+  </script>
+</body>
+</html>

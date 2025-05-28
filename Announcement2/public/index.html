@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>乗り継ぎ検索</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    .route { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>乗り継ぎ検索</h1>
+  <form id="routeForm">
+    <label>出発駅:
+      <select name="startStation" id="startStation">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+      </select>
+    </label>
+    <br><br>
+    <label>目的地駅:
+      <select name="endStation" id="endStation">
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+      </select>
+    <input type="submit">検索</input>
+  </form>
+
+  <div id="results"></div>
+
+  <script>
+    document.getElementById('routeForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const start = document.getElementById('startStation').value;
+      const end = document.getElementById('endStation').value;
+
+      fetch('/find-routes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `startStation=${start}&endStation=${end}`
+      })
+      .then(res => res.json())
+      .then(routes => {
+        const results = document.getElementById('results');
+        results.innerHTML = '';
+        routes.forEach((route, i) => {
+          const div = document.createElement('div');
+          div.className = 'route';
+          div.innerHTML = `<h3>ルート ${i + 1}</h3>` + route.map(step =>
+            `<p>${step.time} - ${step.train} - ${step.station}</p>`
+          ).join('');
+          results.appendChild(div);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

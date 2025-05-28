@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <div id="sokutei">あああ</div>
+        <style>
+            #sokutei {
+                font-size: 2rem;
+            }
+        </style>
+        <script>
+            function getAccurateHeight(element) {
+            if (!element) return 0;
+            const rect = element.getBoundingClientRect();
+            return rect.height;
+            }
+
+            // 使用例
+            const target = document.querySelector('#sokutei');
+            const accurateHeight = getAccurateHeight(target);
+            console.log('正確な高さ:', accurateHeight);
+        </script>
+    </body>
+</html>
